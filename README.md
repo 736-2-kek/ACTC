@@ -1,2 +1,2 @@
 # ACTC
-laba0
+laba0 и laba1
