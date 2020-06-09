@@ -1,0 +1,64 @@
+/*******************************************************************************
+* Copyright (C) 2020 TUSUR, FB
+* File              : idz.c
+* Compiler          : NetBeans
+* Version           : 8.2
+* Created File      : 03.03.2020
+* Last modified     : 07.06.2020
+*
+* Support mail      : elena-muza@mail.ru
+*
+* Target MCU        : MDR1986
+*
+* Description       : Function reads a k bit from a variable
+*                   :
+*******************************************************************************/
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <main.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include "mstn_version.h"
+#include "mstn_led.h"
+#include "mstn_clk.h"
+#include "mstn_usb.h"
+
+
+bool readBit (int16_t InputW, int16_t k)
+{
+  bool bit;//bit of interest
+  if((InputW&(1<<k))==0)//logical multiplication of the entered number by a number with all zeros and ones in the bit of interest
+  {
+    bit = false;//k bit is equal to zero
+  }
+  else
+  {
+  bit = true;//k bit is equal to one
+  }
+  return bit;
+}
+int main(int argc, char *argv[])
+{
+  int16_t a;//any positive number no more than 16 bits
+  int16_t b;//any positive number no more than 16 bits
+  a = 5;
+  b = 1;
+  while (USB_GetStatus() != PERMITTED);
+    if ( readBit (a, b) == false) 
+    {
+        printf("0\n");  
+        LED_SetGreenState(TURN_ON); 
+        Delay (10000); 
+        LED_SetGreenState(TURN_OFF); 
+    }
+    else
+    {
+        printf("1\n");  
+        LED_SetRedState(TURN_ON); 
+        Delay (10000); 
+        LED_SetRedState(TURN_OFF); 
+    }
+ 
+    return EXIT_SUCCESS;
+}
