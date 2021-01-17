@@ -1,0 +1,51 @@
+/*******************************************************************************
+* Copyright (C) 2020 TUSUR, FB
+* File              : main.c
+* Compiler          : NetBeans
+* Version           : 8.2
+* Created File      : 03.03.2020
+* Last modified     : 17.01.2021
+*
+* Support mail      : elena-muza@mail.ru
+*
+* Target MCU        : MDR1986
+*
+* Description       : Interruption on MSTN Boards
+*                   :
+*******************************************************************************/
+#include <stdbool.h>
+#include <stdint.h>
+#include <main.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include "mstn_version.h" 
+#include "mstn_led.h" 
+#include "mstn_clk.h" 
+#include "mstn_usb.h" 
+#include "mstn_button.h" 
+#include "mstn_external_interrupt.h" 
+
+//_Edge CHANGE;
+
+void interrupt() //function of interrapt
+{
+    LED_SetGreenState(TURN_ON); 
+    Delay (1000); 
+    LED_SetGreenState(TURN_OFF);
+}
+int main(int argc, char *argv[])
+{
+    EINT_AttachExtInt(interrupt, D6, CHANGE);//go to function of interrupt, when the signal edge changes 
+    BTN_UserButtonInit();
+    while(1) 
+    {
+        if ((BTN_UserButtonRead() == PRESSED))
+  //while (USB_GetStatus() != PERMITTED);
+        {   
+            LED_SetRedState(TURN_ON); 
+            Delay (1000); 
+            LED_SetRedState(TURN_OFF);
+        }
+    }
+    return EXIT_SUCCESS;
+}
